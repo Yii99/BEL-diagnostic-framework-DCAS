@@ -6,9 +6,6 @@ job/
 # Local virtualenv
 .dcas/
 
-# Pre-strip snapshot of code/, kept outside the history
-code_with_comments_backup_*.tar.gz
-
 # Released separately: 42 MB, and its licence is the corpus owner's to grant
 data/MedMentions/
 
