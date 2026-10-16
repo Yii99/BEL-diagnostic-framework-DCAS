@@ -1,25 +1,18 @@
 # Benchmarks
 
 Three benchmarks in their original PubTator form, plus the UMLS-mapped version we
-work from. MedMentions is already annotated with CUIs and needs no mapping; it is
-not included here, see its own repository.
+work from. 
 
 ## What we added
 
-The benchmarks annotate mentions with their own identifiers -- MeSH descriptors and
-supplementary records, OMIM entries -- not with UMLS CUIs. Our evaluation uses UMLS
-as the knowledge base, so every source identifier is resolved to the CUIs that carry
-it. `code/preprocess/map_pubtator_to_umls.py` does this against MRCONSO.
-
-Two files per split:
+We map the annotations of these benchmarks to UMLS. Two files per split:
 
 | | |
 |---|---|
 | `*.umls.txt` | the original file with one column appended: `UMLS:C0023895` or `UMLS:C0267809;C1835713;...` when the identifier maps to several equivalent concepts |
 | `*.umls.txt.mapping.tsv` | one row per source identifier: `source_namespace`, `source_id`, `mention_count`, `mapping_status`, `mapping_method`, `n_cui`, `umls_cuis` |
 
-A mention keeps every CUI its identifier maps to. All of them count as correct, and
-none of them is ever sampled as a negative.
+A mention keeps every CUI its identifier maps to. 
 
 `mapping_status` is `mapped_unique`, `mapped_multiple`, or `unmapped`. Unmapped
 identifiers are retired or source-local codes with no UMLS counterpart; the mentions
