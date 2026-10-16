@@ -1,28 +1,3 @@
-"""Embedding negatives, retrieved by the mention surface form.
-
-Both sides are encoded with the same BioBERT and L2 normalised, so the inner
-product is the cosine:
-
-  query side   the mention surface form, the same string the lexical builders
-               query with. Unique surface forms are encoded once
-  entity side  the entity name: its preferred name, and under
-               --text-mode preferred_aliases up to --max-aliases aliases
-               joined by the tokenizer's SEP token
-
-Querying by the mention rather than by the gold concept matters twice over.
-It keeps this bucket comparable with the lexical ones, which also ask "what
-looks like what the author wrote", and it lets two mentions of the same gold
-concept get different negatives -- a gold-queried bucket gives `WD` and
-`Wilson disease` the identical list.
-
-The entity index is built here on first use and cached under --index-dir, so
-this is the only script that needs BioBERT.
-
-    python code/preprocess/embedding_negatives.py \\
-        --concepts outputs/kb/umls_2020AA/concepts.pkl \\
-        --mentions outputs/ncbi_disease/mentions_test.jsonl \\
-        --output outputs/ncbi_disease/negatives_embedding_mention.jsonl
-"""
 from __future__ import annotations
 
 import json
