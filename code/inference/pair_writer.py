@@ -1,23 +1,3 @@
-"""Shared output plumbing for the standalone scorers (Qwen3-Reranker, LongBEL).
-
-`score_pairs.py` covers every backend that fits the generic
-"score (mention string, candidate string) pairs" interface. Two baselines do
-not fit it and get their own scripts:
-
-  * Qwen3-Reranker  -- a yes/no LLM reranker whose score is a probability, not a
-    similarity, and whose prompt template comes from BioELX.
-  * LongBEL         -- document-level: each prediction is conditioned on the
-    previous normalisations in the same document, so mentions cannot be scored
-    in isolation and the loop is per document, not per mention.
-
-Those scripts write the *same* parquet schema as 07 (plus backend-specific extra
-columns), so `metrics.py` consumes all of them without changes.
-
-Note: 07 still carries its own inline copy of the plan/write code. It was left
-untouched deliberately while its jobs were queued; consolidating 07 onto this
-module is a safe follow-up once those runs are done.
-"""
-
 from __future__ import annotations
 
 import json

@@ -1,38 +1,3 @@
-"""Shared IO, path conventions, and negative flattening for the inference stage.
-
-``code/preprocess`` leaves one directory per benchmark under ``outputs/``::
-
-    outputs/kb/umls_2020AA/concepts.pkl                 build_concept_dict.py
-    outputs/<dataset>/mentions_test.jsonl               parse_benchmark.py
-    outputs/<dataset>/negatives_lexical_tfidf.jsonl     lexical_negatives.py
-    outputs/<dataset>/negatives_lexical_dice.jsonl      lexical_negatives.py --metric dice
-    outputs/<dataset>/negatives_ontological.jsonl       ontological_negatives.py
-    outputs/<dataset>/negatives_embedding_mention.jsonl embedding_negatives.py
-    outputs/<dataset>/negatives_random.jsonl            random_negatives.py
-    outputs/<dataset>/negatives_lexonto_*.jsonl         lexonto_negatives.py
-
-The inference stage adds::
-
-    outputs/scores/<model_slug>/<dataset>/<run_tag>/pair_scores.parquet   score_pairs.py
-    outputs/scores/<model_slug>/<dataset>/<run_tag>/run_meta.json         score_pairs.py
-    outputs/scores/<model_slug>/<dataset>/<run_tag>/excluded_mentions.jsonl
-    outputs/metrics/<...>.csv                                            metrics.py
-
-Two conventions worth knowing:
-
-*Negative taxonomy.* Each negative carries a coarse ``negative_type`` (the row
-label used in tables) and a finer ``negative_subtype`` (the bucket it came out
-of). The six ontology buckets collapse into ``ontology_related``; the ~90
-per-TUI semantic-type buckets collapse into ``same_semantic_type`` with the TUI
-kept as the subtype.
-
-*Streaming.* MedMentions has 40k mentions and 5.6M negatives spread over five
-files, so nothing loads whole negative files into Python dicts. ``NegativeStore``
-byte-indexes each file by ``mention_id`` (a regex over raw lines, no JSON
-parsing) and seeks per mention, which keeps the index at one offset per mention
-per file.
-"""
-
 from __future__ import annotations
 
 import json

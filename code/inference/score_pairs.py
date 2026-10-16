@@ -1,39 +1,3 @@
-"""Score every (mention, gold, hard-negative) triple with one baseline.
-
-This is the foundation of the inference stage: every table and figure downstream
-aggregates the parquet written here.
-
-Per mention, with gold concept g and each negative concept n::
-
-    gold_score     = max over gold aliases of scorer(mention, alias)    (--gold-name-mode)
-    negative_score = scorer(mention, name(n))                           (--neg-name-mode)
-    margin         = gold_score - negative_score
-    success        = gold_score >  negative_score
-    confused       = negative_score >= gold_score
-
-Ties count as confusion: a linker that cannot separate the gold concept from a
-parent concept has not distinguished them, and reporting ties as successes would
-flatter every backend that emits coarse scores.
-
-Inputs
-    <dataset-dir>/mentions_test.jsonl              from 02
-    <dataset-dir>/negatives_<kind>.jsonl           from 03-06
-    <kb>/concepts.pkl                              from 01
-
-Outputs
-    <out-dir>/<model_slug>/<dataset>/<run-tag>/pair_scores.parquet
-    <out-dir>/<model_slug>/<dataset>/<run-tag>/run_meta.json
-    <out-dir>/<model_slug>/<dataset>/<run-tag>/excluded_mentions.jsonl
-
-Example
-    python code/inference/score_pairs.py \
-        --dataset ncbi_disease \
-        --dataset-dir outputs/ncbi_disease \
-        --concepts outputs/kb/umls_2020AA/concepts.pkl \
-        --out-dir outputs/scores \
-        --model sapbert --device cuda
-"""
-
 from __future__ import annotations
 
 import gc
